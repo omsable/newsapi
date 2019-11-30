@@ -1,35 +1,38 @@
 oms: 1
-
 info:
   version: 1.0.0
-  title: Your microservice
-  description: Describe your microservice
+  title: NewsAPI
+  description: NewsAPI.org's REST API service (https://newsapi.org)
   license:
     name: MIT
     url: https://opensource.org/licenses/MIT
-
 lifecycle:
   startup:
-    command: ['node', '/app/src/index.js']
-
+    command: ["node", "/app/src/index.js"]
 health:
   http:
     path: /health
     port: 8080
-
 actions:
-  message:
-    help: Insert a "name" into simple greeting text phrase
+  topHeadlines:
+    help: Access News API's Top Headlines
     http:
-      path: /
-      method: post
+      path: /top-headlines
+      method: get
       port: 8080
     arguments:
-      name:
-        help: The "name" to insert into the greeting text phrase.
+      sources:
+        help: Refer to official API service docs.
         type: string
+        default: "new-york-times"
         required: false
-        in: requestBody
+        in: query
     output:
+      help: Top headlines and ledes from requested source(s)
       contentType: application/json
       type: map
+environment:
+  NEWSAPI_API_KEY:
+    type: string
+    required: true
+    help: API Key provided by NewsAPI
